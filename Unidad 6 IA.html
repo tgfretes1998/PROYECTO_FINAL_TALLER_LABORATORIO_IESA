@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unidad 6 – IA Generativa en la Web</title>
+  <title>Unidad 6 – IA Generativa en la Web | IESA</title>
   <style>
-    /* --- Estilo Matrix --- */
+    /* --- ESTILO MATRIX --- */
     body {
       background-color: #000;
       color: #00ff00;
@@ -16,20 +16,21 @@
 
     header {
       text-align: center;
-      padding: 20px;
-      font-size: 2em;
+      padding: 25px;
+      font-size: 1.8em;
       text-shadow: 0 0 10px #00ff00;
       border-bottom: 1px solid #00ff00;
+      background-color: rgba(0, 0, 0, 0.7);
     }
 
     section {
       max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
+      margin: 40px auto;
+      padding: 25px;
       border: 1px solid #00ff00;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ff00;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.75);
     }
 
     h2 {
@@ -37,39 +38,16 @@
       text-shadow: 0 0 10px #00ff00;
       border-bottom: 1px dashed #00ff00;
       padding-bottom: 5px;
+      margin-bottom: 15px;
     }
 
-    p {
+    p, li {
       line-height: 1.6;
     }
 
-    /* Efecto "Matrix" cayendo */
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    /* Botón estilo Matrix */
-    button {
-      background-color: black;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      padding: 10px 20px;
-      font-family: 'Courier New', monospace;
-      cursor: pointer;
-      border-radius: 5px;
-      text-shadow: 0 0 5px #00ff00;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background-color: #00ff00;
-      color: black;
-      box-shadow: 0 0 15px #00ff00;
+    ul {
+      list-style-type: "☲ ";
+      margin-left: 20px;
     }
 
     textarea {
@@ -81,6 +59,26 @@
       padding: 10px;
       resize: none;
       font-family: 'Courier New', monospace;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 10px 20px;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+      text-shadow: 0 0 5px #00ff00;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #00ff00;
+      color: black;
+      box-shadow: 0 0 15px #00ff00;
     }
 
     #respuesta {
@@ -89,6 +87,25 @@
       padding: 10px;
       border-radius: 5px;
       background: rgba(0, 0, 0, 0.6);
+      min-height: 50px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid #00ff00;
+      color: #00ff00;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* --- FONDO MATRIX ANIMADO --- */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
   </style>
 </head>
@@ -96,70 +113,113 @@
 
   <canvas id="matrix"></canvas>
 
-  <header>🧠 Unidad 6 – IA Generativa en la Web</header>
+  <header>🧠 Unidad 6 – IA Generativa en la Web | IESA</header>
 
   <section>
-    <h2>1️⃣ Investigación: ¿Qué es la IA Generativa?</h2>
+    <h2>🔹 ¿Qué es la IA Generativa?</h2>
     <p>
-      La Inteligencia Artificial Generativa (IA Generativa) es una rama de la IA que utiliza modelos de aprendizaje automático 
-      para <b>crear contenido nuevo</b> como texto, imágenes, música, código o videos, a partir de patrones aprendidos.
-    </p>
-    <p>
-      A diferencia de la IA tradicional, la generativa produce información original.  
-      Ejemplos: <b>ChatGPT</b>, <b>DALL·E</b>, <b>Midjourney</b>, <b>Runway</b>, <b>Suno</b>.
+      La <b>Inteligencia Artificial Generativa</b> es una rama avanzada de la IA que se centra en <b>crear contenido nuevo</b> 
+      (texto, imágenes, audio, video o código) utilizando patrones aprendidos de grandes cantidades de datos.
+      En lugar de solo analizar o clasificar información, estos modelos pueden <b>generar resultados originales</b>.
     </p>
   </section>
 
   <section>
-    <h2>2️⃣ Reflexión: Impacto de la IA en la Web</h2>
+    <h2>🔹 Herramientas Populares</h2>
+    <ul>
+      <li><b>ChatGPT:</b> genera texto, ideas, código, correos o explicaciones en lenguaje natural.</li>
+      <li><b>GitHub Copilot:</b> ayuda a los programadores escribiendo líneas de código automáticamente.</li>
+      <li><b>DALL·E:</b> crea imágenes a partir de descripciones escritas.</li>
+      <li><b>Runway / Pika Labs:</b> generan videos a partir de texto.</li>
+      <li><b>Suno / Udio:</b> crean música original mediante IA.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🔹 Ejemplos de Prompts Útiles</h2>
+    <p>Algunos ejemplos de comandos (prompts) para aprovechar IA generativa:</p>
+    <ul>
+      <li>💻 “Generá un script en JavaScript que muestre la hora actual en pantalla.”</li>
+      <li>🎨 “Diseñá un sitio web moderno para un restaurante japonés con tonos oscuros.”</li>
+      <li>🧩 “Explicame cómo funciona el aprendizaje automático con un ejemplo simple.”</li>
+      <li>🧠 “Creá un poema inspirado en la tecnología y la naturaleza.”</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🔹 Análisis de Aplicación Real</h2>
     <p>
-      La IA generativa transforma la creación de contenido, la educación y la comunicación digital.
-    </p>
-    <p>
-      <b>Ventajas:</b> productividad, creatividad, accesibilidad.  
-      <b>Desafíos:</b> ética, derechos de autor, desinformación.
-    </p>
-    <p>
-      <i>"La IA no reemplaza la creatividad humana, la amplifica."</i>
+      Una aplicación web real que usa IA generativa es <b>Canva Magic Studio</b>.  
+      Permite a los usuarios generar imágenes, eliminar fondos, crear textos o videos automáticamente mediante IA.
+      Su impacto se nota en la <b>automatización del diseño gráfico</b>, reduciendo tiempos de trabajo y aumentando la creatividad.
     </p>
   </section>
 
   <section>
-    <h2>3️⃣ Ejemplo Práctico: Asistente IA Generativa</h2>
-    <p>Escribí una pregunta y la IA te responderá con conocimiento sobre inteligencia artificial generativa.</p>
+    <h2>🔹 Reflexión Ética y Responsable</h2>
+    <p>
+      El uso de IA generativa plantea dilemas sobre la <b>veracidad, propiedad intelectual y privacidad</b>.  
+      Utilizar estas herramientas de manera ética implica:
+    </p>
+    <ul>
+      <li>Verificar la información generada antes de publicarla.</li>
+      <li>Evitar usar la IA para suplantar identidades o generar desinformación.</li>
+      <li>Reconocer cuando el contenido fue creado con ayuda de IA.</li>
+    </ul>
+  </section>
 
-    <textarea id="userInput" rows="3" placeholder="Ejemplo: ¿Qué puede crear la IA generativa?"></textarea>
-    <button onclick="generarRespuesta()">Generar respuesta</button>
+  <section>
+    <h2>🔹 Debate: ¿La IA reemplaza o potencia al desarrollador?</h2>
+    <p>
+      La IA no reemplaza al desarrollador, sino que <b>potencia su productividad</b>.  
+      Las herramientas como Copilot o ChatGPT pueden escribir código, pero <b>no comprenden el contexto completo</b> 
+      de un proyecto ni pueden tomar decisiones creativas o éticas.
+    </p>
+    <p>
+      En cambio, los desarrolladores que integran la IA en su flujo de trabajo son capaces de <b>crear más, mejor y más rápido</b>.
+    </p>
+    <p><i>“El futuro no es el humano o la IA, sino ambos trabajando juntos.”</i></p>
+  </section>
+
+  <section>
+    <h2>🔹 Demostración Práctica (Simulación de IA)</h2>
+    <p>Probá una simulación de IA generativa: escribí tu pregunta 👇</p>
+
+    <textarea id="userInput" rows="3" placeholder="Ejemplo: ¿Qué puede hacer la IA generativa?"></textarea>
+    <button onclick="generarRespuesta()">Generar Respuesta</button>
 
     <div id="respuesta"></div>
   </section>
 
+  <footer>
+    © 2025 - IESA (Instituto de Estudios Superiores Argentino) | Unidad 6 – IA Generativa en la Web
+  </footer>
+
   <script>
-    /* --- Simulación de respuesta IA --- */
+    /* --- Simulación de Respuesta de IA --- */
     function generarRespuesta() {
       const input = document.getElementById("userInput").value.trim();
       const salida = document.getElementById("respuesta");
 
       if (input === "") {
-        salida.innerHTML = "⚠️ Por favor, escribí una pregunta para que la IA responda.";
+        salida.innerHTML = "⚠️ Por favor, escribí una pregunta.";
         return;
       }
 
       const respuestas = [
-        "🤖 La IA generativa puede crear textos, imágenes, música y videos originales a partir de datos previos.",
-        "🧩 Se basa en modelos como las redes neuronales y los transformadores (GPT, Diffusion, etc.).",
-        "💡 En la web, se usa para generar artículos, diseños y hasta código automáticamente.",
-        "⚙️ Su potencial depende de cómo las personas la usen: con creatividad y responsabilidad."
+        "🤖 La IA generativa puede crear texto, imágenes, música y código nuevo a partir de patrones previos.",
+        "🧠 Combina grandes modelos de datos con redes neuronales profundas para producir contenido original.",
+        "💡 En programación, puede sugerir código o detectar errores automáticamente.",
+        "⚙️ Su verdadero poder surge al trabajar junto al desarrollador humano."
       ];
 
       const aleatoria = respuestas[Math.floor(Math.random() * respuestas.length)];
       salida.innerHTML = "<b>IA:</b> " + aleatoria;
     }
 
-    /* --- Efecto Matrix --- */
+    /* --- Fondo Animado estilo Matrix --- */
     const c = document.getElementById("matrix");
     const ctx = c.getContext("2d");
-
     c.height = window.innerHeight;
     c.width = window.innerWidth;
 
@@ -187,6 +247,5 @@
 
     setInterval(draw, 35);
   </script>
-
 </body>
 </html>
