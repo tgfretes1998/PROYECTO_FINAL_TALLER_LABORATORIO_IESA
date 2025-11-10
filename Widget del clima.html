@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IESA - Clima Actual</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 text-gray-800">
+  <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-xl shadow">
+    <h1 class="text-2xl font-bold mb-4 text-center">Clima Actual - IESA</h1>
+
+    <div id="weather" class="space-y-2 text-center">
+      <h2 id="city" class="text-xl font-semibold">Ciudad</h2>
+      <p id="desc" class="text-gray-500">Descripción</p>
+      <p id="temp" class="text-4xl font-bold">--°C</p>
+      <p id="feels" class="text-sm text-gray-500">Sensación térmica --°C</p>
+    </div>
+
+    <div class="mt-4 flex gap-2">
+      <input id="city-input" type="text" placeholder="Buscar ciudad (ej: Posadas)" class="flex-1 border rounded px-3 py-2" />
+      <button id="btn-search" class="bg-blue-600 text-white px-4 py-2 rounded">Buscar</button>
+      <button id="btn-geo" class="border px-3 py-2 rounded">Mi ubicación</button>
+    </div>
+
+    <p class="text-xs text-gray-400 mt-2">
+      ⚙️ Reemplazá <strong>YOUR_API_KEY</strong> por tu API key de OpenWeatherMap.
+    </p>
+  </div>
+
+  <script>
+    const API_KEY = 'YOUR_API_KEY'; // ← Poner tu clave de OpenWeatherMap
+    const units = 'metric';
+    const lang = 'es';
+
+    const cityElem = document.getElementById('city');
+    const descElem = document.getElementById('desc');
+    const tempElem = document.getElementById('temp');
+    const feelsElem = document.getElementById('feels');
+    const input = document.getElementById('city-input');
+
+    async function fetchWeather(city) {
+      try {
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${units}&lang=${lang}`);
+        if (!res.ok) throw new Error('Ciudad no encontrada');
+        const data = await res.json();
+        renderWeather(data);
+      } catch (err) {
+        cityElem.textContent = 'Error';
+        descElem.textContent = err.message;
+        tempElem.textContent = '--°C';
+        feelsElem.textContent = '';
+      }
+    }
+
+    function renderWeather(data) {
+      cityElem.textContent = `${data.name}, ${data.sys.country}`;
+      descElem.textContent = data.weather[0].description;
+      tempElem.textContent = `${Math.round(data.main.temp)}°C`;
+      feelsElem.textContent = `Sensación: ${Math.round(data.main.feels_like)}°C`;
+    }
+
+    document.getElementById('btn-search').addEventListener('click', () => {
+      if (input.value.trim()) fetchWeather(input.value.trim());
+    });
+
+    document.getElementById('btn-geo').addEventListener('click', () => {
+      navigator.geolocation.getCurrentPosition(pos => {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${API_KEY}&units=${units}&lang=${lang}`)
+          .then(r => r.json())
+          .then(renderWeather);
+      }, err => alert('No se pudo obtener ubicación.'));
+    });
+
+    // Por defecto: Posadas
+    fetchWeather('Posadas');
+  </script>
+</body>
+</html>
