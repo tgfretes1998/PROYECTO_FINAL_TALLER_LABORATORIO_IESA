@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IESA - Cargar Alumno</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-3xl mx-auto mt-10 bg-white rounded-xl shadow p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">Formulario de Carga de Alumno</h1>
+
+    <form id="form-alumno" class="grid md:grid-cols-2 gap-4">
+      <div class="col-span-2">
+        <label>Institución</label>
+        <input type="text" class="w-full border px-3 py-2 rounded" value="IESA - Istituto de Estudios superiores argentino" readonly />
+      </div>
+
+      <div>
+        <label>Nombre del Alumno *</label>
+        <input id="nombre" type="text" required class="w-full border px-3 py-2 rounded" />
+      </div>
+
+      <div>
+        <label>Materia *</label>
+        <select id="materia" required class="w-full border px-3 py-2 rounded">
+          <option value="">-- Seleccionar --</option>
+          <option>SO</option>
+          <option>Taller</option>
+          <option>Laboratorio</option>
+          <option>Programacion</option>
+          <option>Ingles I</option>
+          <option>Matematicas I</option>
+          <option>Logica I</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Fecha de Inscripción *</label>
+        <input id="fecha" type="date" required class="w-full border px-3 py-2 rounded" />
+      </div>
+
+      <div>
+        <label>Email *</label>
+        <input id="email" type="email" required class="w-full border px-3 py-2 rounded" />
+      </div>
+
+      <div class="col-span-2">
+        <label>reCAPTCHA simulado</label>
+        <div class="flex items-center gap-2 border p-2 rounded">
+          <input id="captcha" type="checkbox" />
+          <span>No soy un robot (simulación)</span>
+        </div>
+      </div>
+
+      <div class="col-span-2 flex gap-3">
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Guardar</button>
+        <button type="reset" class="border px-4 py-2 rounded">Limpiar</button>
+      </div>
+    </form>
+
+    <div id="mensaje" class="mt-4 text-center text-sm"></div>
+
+    <hr class="my-6">
+
+    <h2 class="text-lg font-semibold mb-2">Alumnos Guardados</h2>
+    <table class="w-full text-sm border-collapse" id="tabla">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border px-2 py-1">Nombre</th>
+          <th class="border px-2 py-1">Materia</th>
+          <th class="border px-2 py-1">Inscripción</th>
+          <th class="border px-2 py-1">Email</th>
+          <th class="border px-2 py-1">Acción</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const form = document.getElementById('form-alumno');
+    const tabla = document.querySelector('#tabla tbody');
+    const mensaje = document.getElementById('mensaje');
+    const KEY = 'alumnos_iesa';
+
+    function cargar() {
+      const data = JSON.parse(localStorage.getItem(KEY) || '[]');
+      tabla.innerHTML = '';
+      if (!data.length) {
+        tabla.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500 p-3">Sin alumnos</td></tr>';
+      } else {
+        data.forEach((a, i) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="border px-2 py-1">${a.nombre}</td>
+            <td class="border px-2 py-1">${a.materia}</td>
+            <td class="border px-2 py-1">${a.fecha}</td>
+            <td class="border px-2 py-1">${a.email}</td>
+            <td class="border px-2 py-1 text-center">
+              <button data-i="${i}" class="bg-red-500 text-white text-xs px-2 py-1 rounded">Borrar</button>
+            </td>`;
+          tabla.appendChild(tr);
+        });
+        document.querySelectorAll('button[data-i]').forEach(btn => {
+          btn.onclick = e => {
+            const i = e.target.dataset.i;
+            const data = JSON.parse(localStorage.getItem(KEY) || '[]');
+            data.splice(i, 1);
+            localStorage.setItem(KEY, JSON.stringify(data));
+            cargar();
+          };
+        });
+      }
+    }
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value.trim();
+      const materia = document.getElementById('materia').value;
+      const fecha = document.getElementById('fecha').value;
+      const email = document.getElementById('email').value.trim();
+      const captcha = document.getElementById('captcha').checked;
+
+      if (!captcha) {
+        mensaje.textContent = 'Complete el reCAPTCHA.';
+        mensaje.className = 'text-red-600 text-center';
+        return;
+      }
+
+      const data = JSON.parse(localStorage.getItem(KEY) || '[]');
+      data.push({ nombre, materia, fecha, email });
+      localStorage.setItem(KEY, JSON.stringify(data));
+      form.reset();
+      mensaje.textContent = 'Alumno guardado correctamente.';
+      mensaje.className = 'text-green-600 text-center';
+      cargar();
+    };
+
+    cargar();
+  </script>
+</body>
+</html>
