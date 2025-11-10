@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidad 6 – IA Generativa en la Web</title>
+  <style>
+    /* --- Estilo Matrix --- */
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      font-size: 2em;
+      text-shadow: 0 0 10px #00ff00;
+      border-bottom: 1px solid #00ff00;
+    }
+
+    section {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #00ff00;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ff00;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    h2 {
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+      border-bottom: 1px dashed #00ff00;
+      padding-bottom: 5px;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    /* Efecto "Matrix" cayendo */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* Botón estilo Matrix */
+    button {
+      background-color: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 10px 20px;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      border-radius: 5px;
+      text-shadow: 0 0 5px #00ff00;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #00ff00;
+      color: black;
+      box-shadow: 0 0 15px #00ff00;
+    }
+
+    textarea {
+      width: 100%;
+      background: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      padding: 10px;
+      resize: none;
+      font-family: 'Courier New', monospace;
+    }
+
+    #respuesta {
+      border: 1px dashed #00ff00;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <header>🧠 Unidad 6 – IA Generativa en la Web</header>
+
+  <section>
+    <h2>1️⃣ Investigación: ¿Qué es la IA Generativa?</h2>
+    <p>
+      La Inteligencia Artificial Generativa (IA Generativa) es una rama de la IA que utiliza modelos de aprendizaje automático 
+      para <b>crear contenido nuevo</b> como texto, imágenes, música, código o videos, a partir de patrones aprendidos.
+    </p>
+    <p>
+      A diferencia de la IA tradicional, la generativa produce información original.  
+      Ejemplos: <b>ChatGPT</b>, <b>DALL·E</b>, <b>Midjourney</b>, <b>Runway</b>, <b>Suno</b>.
+    </p>
+  </section>
+
+  <section>
+    <h2>2️⃣ Reflexión: Impacto de la IA en la Web</h2>
+    <p>
+      La IA generativa transforma la creación de contenido, la educación y la comunicación digital.
+    </p>
+    <p>
+      <b>Ventajas:</b> productividad, creatividad, accesibilidad.  
+      <b>Desafíos:</b> ética, derechos de autor, desinformación.
+    </p>
+    <p>
+      <i>"La IA no reemplaza la creatividad humana, la amplifica."</i>
+    </p>
+  </section>
+
+  <section>
+    <h2>3️⃣ Ejemplo Práctico: Asistente IA Generativa</h2>
+    <p>Escribí una pregunta y la IA te responderá con conocimiento sobre inteligencia artificial generativa.</p>
+
+    <textarea id="userInput" rows="3" placeholder="Ejemplo: ¿Qué puede crear la IA generativa?"></textarea>
+    <button onclick="generarRespuesta()">Generar respuesta</button>
+
+    <div id="respuesta"></div>
+  </section>
+
+  <script>
+    /* --- Simulación de respuesta IA --- */
+    function generarRespuesta() {
+      const input = document.getElementById("userInput").value.trim();
+      const salida = document.getElementById("respuesta");
+
+      if (input === "") {
+        salida.innerHTML = "⚠️ Por favor, escribí una pregunta para que la IA responda.";
+        return;
+      }
+
+      const respuestas = [
+        "🤖 La IA generativa puede crear textos, imágenes, música y videos originales a partir de datos previos.",
+        "🧩 Se basa en modelos como las redes neuronales y los transformadores (GPT, Diffusion, etc.).",
+        "💡 En la web, se usa para generar artículos, diseños y hasta código automáticamente.",
+        "⚙️ Su potencial depende de cómo las personas la usen: con creatividad y responsabilidad."
+      ];
+
+      const aleatoria = respuestas[Math.floor(Math.random() * respuestas.length)];
+      salida.innerHTML = "<b>IA:</b> " + aleatoria;
+    }
+
+    /* --- Efecto Matrix --- */
+    const c = document.getElementById("matrix");
+    const ctx = c.getContext("2d");
+
+    c.height = window.innerHeight;
+    c.width = window.innerWidth;
+
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+    const matrix = chars.split("");
+    const font_size = 14;
+    const columns = c.width / font_size;
+    const drops = [];
+
+    for (let x = 0; x < columns; x++) drops[x] = 1;
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = "#0F0";
+      ctx.font = font_size + "px monospace";
+      for (let i = 0; i < drops.length; i++) {
+        const text = matrix[Math.floor(Math.random() * matrix.length)];
+        ctx.fillText(text, i * font_size, drops[i] * font_size);
+        if (drops[i] * font_size > c.height && Math.random() > 0.975)
+          drops[i] = 0;
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 35);
+  </script>
+
+</body>
+</html>
