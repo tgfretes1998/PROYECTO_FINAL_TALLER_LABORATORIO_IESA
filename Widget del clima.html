@@ -1,79 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IESA - Clima Actual</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Clima</title>
+  <style>
+    body {
+      background-color: #d9d9d9;
+      color: #007BFF;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #0056b3;
+      text-shadow: 1px 1px 3px #fff;
+    }
+
+    input, button {
+      background-color: white;
+      color: #0056b3;
+      border: 2px solid #007BFF;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .resultado {
+      margin-top: 25px;
+      font-size: 20px;
+      background-color: #f2f2f2;
+      border-radius: 10px;
+      padding: 20px;
+      display: inline-block;
+      box-shadow: 0 0 10px #007BFF;
+    }
+
+    .resultado b {
+      font-size: 22px;
+      color: #003366;
+    }
+
+    iframe {
+      border: 2px solid #007BFF;
+      border-radius: 10px;
+      width: 90%;
+      height: 350px;
+      margin-top: 25px;
+      box-shadow: 0 0 10px #0056b3;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
 </head>
-<body class="bg-blue-50 text-gray-800">
-  <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-xl shadow">
-    <h1 class="text-2xl font-bold mb-4 text-center">Clima Actual - IESA</h1>
+<body>
 
-    <div id="weather" class="space-y-2 text-center">
-      <h2 id="city" class="text-xl font-semibold">Ciudad</h2>
-      <p id="desc" class="text-gray-500">Descripción</p>
-      <p id="temp" class="text-4xl font-bold">--°C</p>
-      <p id="feels" class="text-sm text-gray-500">Sensación térmica --°C</p>
-    </div>
+  <h1>🌤 Buscador de Clima</h1>
+  <p>Escribí una ciudad para conocer su clima actual y ubicación:</p>
 
-    <div class="mt-4 flex gap-2">
-      <input id="city-input" type="text" placeholder="Buscar ciudad (ej: Posadas)" class="flex-1 border rounded px-3 py-2" />
-      <button id="btn-search" class="bg-blue-600 text-white px-4 py-2 rounded">Buscar</button>
-      <button id="btn-geo" class="border px-3 py-2 rounded">Mi ubicación</button>
-    </div>
+  <input type="text" id="ciudad" placeholder="Ejemplo: Posadas, Misiones">
+  <button onclick="buscarClima()">Buscar</button>
 
-    <p class="text-xs text-gray-400 mt-2">
-      ⚙️ Reemplazá <strong>YOUR_API_KEY</strong> por tu API key de OpenWeatherMap.
-    </p>
-  </div>
+  <div id="resultado"></div>
+  <div id="mapa"></div>
+
+  <footer>
+    <p>Desarrollado por IESA – Proyecto Final Integrador</p>
+  </footer>
 
   <script>
-    const API_KEY = 'YOUR_API_KEY'; // ← Poner tu clave de OpenWeatherMap
-    const units = 'metric';
-    const lang = 'es';
+    async function buscarClima() {
+      const ciudad = document.getElementById("ciudad").value.trim();
+      const resultado = document.getElementById("resultado");
+      const mapa = document.getElementById("mapa");
 
-    const cityElem = document.getElementById('city');
-    const descElem = document.getElementById('desc');
-    const tempElem = document.getElementById('temp');
-    const feelsElem = document.getElementById('feels');
-    const input = document.getElementById('city-input');
+      if (!ciudad) {
+        resultado.innerHTML = "<p>⚠️ Ingresá una ciudad.</p>";
+        mapa.innerHTML = "";
+        return;
+      }
 
-    async function fetchWeather(city) {
+      resultado.innerHTML = "<p>⏳ Buscando datos del clima...</p>";
+      mapa.innerHTML = "";
+
       try {
-        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${units}&lang=${lang}`);
-        if (!res.ok) throw new Error('Ciudad no encontrada');
-        const data = await res.json();
-        renderWeather(data);
-      } catch (err) {
-        cityElem.textContent = 'Error';
-        descElem.textContent = err.message;
-        tempElem.textContent = '--°C';
-        feelsElem.textContent = '';
+        // Obtener coordenadas de la ciudad
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${ciudad}`);
+        const geoData = await geoRes.json();
+
+        if (geoData.length === 0) {
+          resultado.innerHTML = "<p>❌ Ciudad no encontrada.</p>";
+          return;
+        }
+
+        const lat = geoData[0].lat;
+        const lon = geoData[0].lon;
+
+        // Obtener clima actual con Open-Meteo
+        const climaRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const climaData = await climaRes.json();
+
+        const temp = climaData.current_weather.temperature;
+        const viento = climaData.current_weather.windspeed;
+
+        resultado.innerHTML = `
+          <div class="resultado">
+            🌍 <b>${ciudad}</b><br>
+            🌡 Temperatura: <b>${temp}°C</b><br>
+            💨 Viento: <b>${viento} km/h</b>
+          </div>
+        `;
+
+        // Mostrar mapa de Google Maps debajo
+        mapa.innerHTML = `
+          <iframe
+            src="https://www.google.com/maps?q=${lat},${lon}&z=10&output=embed">
+          </iframe>
+        `;
+      } catch (error) {
+        resultado.innerHTML = "<p>⚠️ Error al obtener los datos del clima.</p>";
       }
     }
-
-    function renderWeather(data) {
-      cityElem.textContent = `${data.name}, ${data.sys.country}`;
-      descElem.textContent = data.weather[0].description;
-      tempElem.textContent = `${Math.round(data.main.temp)}°C`;
-      feelsElem.textContent = `Sensación: ${Math.round(data.main.feels_like)}°C`;
-    }
-
-    document.getElementById('btn-search').addEventListener('click', () => {
-      if (input.value.trim()) fetchWeather(input.value.trim());
-    });
-
-    document.getElementById('btn-geo').addEventListener('click', () => {
-      navigator.geolocation.getCurrentPosition(pos => {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${API_KEY}&units=${units}&lang=${lang}`)
-          .then(r => r.json())
-          .then(renderWeather);
-      }, err => alert('No se pudo obtener ubicación.'));
-    });
-
-    // Por defecto: Posadas
-    fetchWeather('Posadas');
   </script>
+
 </body>
 </html>
