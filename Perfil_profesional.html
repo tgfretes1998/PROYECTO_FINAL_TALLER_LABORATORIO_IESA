@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <style>
+        <button onclick="alert('¡Bienvenido a la página!')">Mostrar alerta</button>
+        /* 1. Fuentes modernas y colores atractivos */
+        body {
+            font-family: 'Times New Roman', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f5f5f5;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 2. Estilo para los títulos */
+        h1 {
+            color: #6eda92;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #d91515;
+        }
+        
+        /* 3. Mejora para la lista y elementos interactivos */
+        ul {
+            background-color: lightgreen;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        li {
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        li:hover {
+            color: #6eda92;
+            transform: translateX(15px);
+        }
+        
+        p {
+            background-color: white;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+        }.profile-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20vh;
+        background-color: #000000;
+    }
+
+        .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 35%;
+      object-fit: cover;
+      border: 2px solid #4caf50;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    </style>
+</head>
+<body>
+    <h1>Soy Fretes Tomas</h1>
+    <h3>Soy Tecnico Superior en Electricidad Industrial y alumno del IESA</h3>
+    <p>Te invito a visitar mi perfil para ver mis trabajos</p>
+    <h3>Me dedico a:</h3>
+    <ul>
+        <li>Programar</li>
+        <li>Reparar artefactos</li>
+        <li>Proyeccion y ejecucion de proyectos y planos</li>
+        <li>Realizar instalaciones electricas industriales/domiciliarias</li>
+    </ul>
+        <div class="profile-container">
+        <img src="C:\Users\tomas\Desktop\class\profile-container\foto.jpg.jpeg" class="profile-pic">
+    </div>
+    <button onclick="saludar()">Saludar</button>
+
+    <script>
+    function saludar() 
+    {
+    alert("Buenas, gracias por contactarse conmigo");
+    }
+    </script>
+   <button onclick="document.body.style.backgroundColor = 'lightblue'">Cambiar fondo</button>
+
+</body>
+</html>
